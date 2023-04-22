@@ -2,6 +2,7 @@
 
 import src
 import os
+import time
 
 # Stores all possible commands. 
 commands = {}
@@ -74,11 +75,16 @@ def ls(args):
     print("Files:\n\t" + ", ".join(dirs))
 
 def run(args):
+    """Usage: run [filename] [delimiter_after]. This reads an entire python file, and then runs it. You can optionally run all code after a specific string."""
+
     [file, delim] = get_possible_next_arg(args, "")
 
-    print(f"running {file} ...")
+    print(f"running {file} ...\n")
+    t0 = time.time()
+    
     src.run_file(file, from_delimiter=delim)
-    print("\ndone")
+
+    print(f"\ndone in {time.time()-t0}s")
 
 def eval_fn(args):
     """Evaluates the python expression, and prints the output"""
@@ -108,7 +114,7 @@ def run_section(args):
             import mlframework as ml # I haven't done much ML stuff recently, so I will just do some made up thing for this example
             
             sparse_matrix = np.read(
-                pandas.read_csv("100gigMatrix.csv") # TODO: stop string this as a csv, what were we thinking
+                pandas.read_csv("100gigMatrix.csv") # TODO: stop storing this as a csv, what were we thinking
             )
 
             # ---- Training the network
@@ -148,15 +154,20 @@ def vars(filterStr):
         if filterStr != "" and filterStr not in k:
             continue
 
-        print(f"\t'{k}' [{type(v)}] : {v.__repr__()}")
+        readable_string = v.__str__().replace("\t", "    ")
+        if '\n' in readable_string:
+            readable_string = readable_string.split('\n')[0]
+
+        max_len = 100
+        if len(readable_string) > max_len:
+            readable_string = readable_string[0:max_len-3] + "..."
+
+        print(f"\t'{k}' [{type(v)}] : {readable_string}")
 
 commands["cd"] = cd
 commands["ls"] = ls
 commands["run"] = run
-commands["r"] = run
 commands["section"] = run_section
-commands["sec"] = run_section
-commands["eval"] = eval_fn
 commands[">"] = eval_fn
 commands["clear"] = clear
 commands["exit"] = exit_fn
