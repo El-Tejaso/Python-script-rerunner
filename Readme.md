@@ -62,9 +62,6 @@ done
 
 ```
 
-Note that the 
-
-
 
 ## Future
 
