@@ -68,8 +68,8 @@ Note that the
 
 ## Future
 
-Something I can implement here that is probably impossible to do in Jupyter is something that keeps track of state, and
-can undo/redo the results of executing a particular python script. 
-It should also be possible to keep track of an undo tree, if a linear track isn't enough. 
-Not sure how useful it is, but I am fairly certain it can be done, for variables that can be deep-copied, at least.
-There will be some things for which it is pretty much impossible.
+- Transactional runs, and Undo/Redo
+        - Allow state to be reset to what it was before running a script
+
+- Change tracking
+        - Keep track of which script run modified which global variable, and when
